@@ -6,7 +6,7 @@ use strict;
 use UNIVERSAL;
 use Getopt::GUI::Long;
 
-our $VERSION = '0.2';
+our $VERSION = '0.21';
 
 our %master_arguments =
   (
