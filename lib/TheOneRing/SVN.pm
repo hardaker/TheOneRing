@@ -39,6 +39,21 @@ sub init {
 		    N => 'N'},
        },
 
+       'annotate' =>
+       {
+	args => { r => '-r' }
+       },
+
+       'info' =>
+       {
+	args => { r => '-r' }
+       },
+
+       'add' =>
+       {
+	args => { r => '-r' }
+       },
+
       };
 }
 

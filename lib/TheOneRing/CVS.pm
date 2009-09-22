@@ -4,6 +4,7 @@ package TheOneRing::CVS;
 
 use strict;
 use TheOneRing;
+use IO::File;
 
 our @ISA = qw(TheOneRing);
 
@@ -39,7 +40,29 @@ sub init {
 		    N => 'l'},
        },
 
+       'annotate' =>
+       {
+	args => { r => '-r',
+		  'N' => 'l'}
+       },
+
+
       };
+}
+
+sub info {
+    my $fh = IO::File->new("<CVS/Repository");
+    my $repo = <$fh>;
+    $fh->close;
+
+    $fh = IO::File->new("<CVS/Root");
+    my $root = <$fh>;
+    $fh->close;
+
+    print "Root:       $root";
+    print "Repository: $repo";
+    chomp($root);
+    print "Full Path:  $root/$repo";
 }
 
 1;
