@@ -3,10 +3,10 @@ dist/make.pod
 dist/Makefile.pp
 dist/makerelease.xml
 lib/TheOneRing.pm
+lib/TheOneRing/CVS.pm
 lib/TheOneRing/GIT.pm
 lib/TheOneRing/SVK.pm
 lib/TheOneRing/SVN.pm
-lib/TheOneRing/CVS.pm
 Makefile.PL
 MANIFEST
 MANIFEST.SKIP

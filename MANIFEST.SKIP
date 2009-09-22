@@ -5,12 +5,12 @@
 .*.old
 .*.bak
 .*Makefile$
-.*CVS
 .*\.#
 .svn
 pm_to_blib
 blib
 .*.linux
 .*.tar.gz
+.*.tar
 .*.html
 .*.tmp
