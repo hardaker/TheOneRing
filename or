@@ -1,0 +1,23 @@
+# Copyright (C) 2009 Wes Hardaker
+# License: GNU GPLv2.  See the COPYING file for details.
+#!/usr/bin/perl
+
+use TheOneRing;
+
+use Getopt::GUI::Long;
+
+my %opts;
+Getopt::GUI::Long::Configure(qw(display_help no_ignore_case no_gui
+				require_order));
+
+GetOptions(\%opts,
+	   ["d|debug", "Turn on debugging output\n"]
+	  ) || exit;
+
+my @or_opts;
+push @or_opts, 'debug', 1 if ($opts{'d'});
+
+
+use Data::Dumper;;
+my $or = new TheOneRing(@or_opts);
+$or->dispatch(@ARGV);
