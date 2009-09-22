@@ -72,9 +72,11 @@ our %master_arguments =
     ["q|quiet"             => "Quiet output"],
    ],
 
+   #XXX: log
    #XXX: push
    #XXX: pull
    #XXX: tag
+   #XXX: move
    #XXX: mkdir
    #XXX: cat
    #XXX: resolve(d)
@@ -87,6 +89,25 @@ our %master_arguments =
 
   );
 
+# XXX: any benifit to making this per-object?  local overrides by object user?
+our %aliases =
+  (
+   blame => 'annotate',
+   ann   => 'annotate',
+
+   co    => 'checkout',
+
+   ci    => 'commit',
+
+   di    => 'diff',
+
+   ls    => 'list',
+	 	
+   st    => 'status',
+   stat  => 'status',
+
+   up    => 'update',
+  );
 
 
 # note: this new clause is used by most sub-modules too, altering it
@@ -110,6 +131,10 @@ sub dispatch {
     my ($self, $command, @args) = @_;
 
     my $repotype;
+
+    if (exists($aliases{$command})) {
+	$command = $aliases{$command};
+    }
 
     # do checkout/stuff first
     if ($command eq 'checkout' || $command eq 'co' ||
