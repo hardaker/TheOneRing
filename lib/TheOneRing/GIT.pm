@@ -7,7 +7,7 @@ use TheOneRing;
 
 our @ISA = qw(TheOneRing);
 
-our $VERSION = '0.22';
+our $VERSION = '0.3';
 
 sub init {
     my ($self) = @_;
