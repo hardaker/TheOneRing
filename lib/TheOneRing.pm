@@ -236,9 +236,29 @@ sub expect_array {
     return [$self->expect_string($value, @args)];
 }
 
+sub save_ARGV {
+    my ($self, $newargv, @newargs) = @_;
+
+    # save the current program name
+    my $self->{'savedprog'} = $main::0;
+    $main::0 = $newargv if (defined($newargv));
+
+    # save the existing ARGV arguments (just in case)
+    @{$self->{'savedARGV'}} = @main::ARGV;
+    @main::ARGV = @newargs;
+}
+
+sub restore_ARGV {
+    my ($self) = @_;
+    @main::ARGV = @{$self->{'savedARGV'}} if (defined($self->{'savedARGV'}));
+    $main::0 = $self->{'savedprog'} if (defined($self->{'savedprog'}));
+    delete $self->{'savedprog'};
+}
+
+
 sub map_args {
     my ($self, $subcmd, $map, @args) = @_;
-    my %opts = @{$self->{'defaults'}{$subcmd} || []};
+    my %opts = @{$self->{$subcmd}{'defaults'} || []};
 
     # first process against the known arguments
     my $cmdoptions =
@@ -253,18 +273,15 @@ sub map_args {
 				    require_order allow_zero));
 
     # save the current program name
-    my $savedprog = $main::0;
-    $main::0 = "$main::0 [OR OPTIONS] $subcmd";
-
-    # save the existing ARGV arguments (just in case)
-    my @savedARGV = @main::ARGV;
-    @main::ARGV = @args;
+    $self->save_ARGV("$main::0 [OR OPTIONS] $subcmd", @args);
 
     # and process our local arguments, and return everything to normal
     GetOptions(\%opts, @$cmdoptions) || exit;
+
     my @remainingargs = @main::ARGV;
-    @main::ARGV = @savedARGV;
-    $main::0 = $savedprog;
+
+    # restore the saved args
+    $self->restore_ARGV();
 
     # process %opts
 
@@ -290,7 +307,7 @@ sub map_args {
 	    push @options, "-$argsmap->{$optkey}";
 	}
     }
-    return ($newcommand, $newsubcmd, \@options, \@remainingargs);
+    return ($newcommand, $newsubcmd, \@options, \@remainingargs, \%opts);
 }
 
 sub map_and_run {
