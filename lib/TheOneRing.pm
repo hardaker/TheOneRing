@@ -46,6 +46,18 @@ our %master_arguments =
     ["q|quiet"          => "Quiet output"],
    ],
 
+   'add' =>
+   [
+    ["N|non-recursive"     => "Don't decend into subdirectiories"],
+    ["q|quiet"             => "Quiet output"],
+   ],
+
+   'remove' =>
+   [
+    ["N|non-recursive"     => "Don't decend into subdirectiories"],
+    ["q|quiet"             => "Quiet output"],
+   ],
+
    #XXX: add
    #XXX: remove
    #XXX: ls

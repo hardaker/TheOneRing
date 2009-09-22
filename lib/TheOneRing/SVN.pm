@@ -51,7 +51,14 @@ sub init {
 
        'add' =>
        {
-	args => { r => '-r' }
+	args => { N => 'N',
+		  q => 'q'}
+       },
+
+       'remove' =>
+       {
+	args => { N => 'N',
+		  q => 'q'}
        },
 
       };
