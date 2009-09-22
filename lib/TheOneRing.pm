@@ -13,16 +13,32 @@ our %master_arguments =
    'commit' =>
    [
    ["m|message|msg=s" => "Commit message"],
+   ["N|non-recursive"  => "Don't decend into subdirectiories"],
+   ["q|quiet"               => "Update quietly as possible"],
    ],
 
    'diff' =>
    [
    ["r|revision|msg=i" => "Revision to diff against"],
+   ["N|non-recursive"  => "Don't decend into subdirectiories"],
+   ],
+
+   'update' =>
+   [
+   ["r|revision=s"          => "Revision to update to"],
+   ["N|non-recursive"       => "Don't decend into subdirectiories"],
+   ["q|quiet"               => "Update quietly as possible"],
+   ],
+
+   'status' =>
+   [
+    ["q|quiet"          => "Quiet output"],
    ],
 
    'test' =>
    [
-   ["f|foo" => "bar"],
+    ["f|foo" => "bar"],
+    ["m|msg=s" => "message"],
    ],
   );
 
@@ -79,9 +95,7 @@ sub dispatch {
 	if (!defined($repotype)) {
 	    # XXX: try dynamic system of some kind here now that the speed
 	    # attempt is done?
-	    print STDERR
-	      "Failed to determine the type of repository we're in.\n";
-	    exit 1;
+	    $self->ERROR("Failed to determine the type of repository we're in.");
 	}
     }
     $self->debug("found subtype $repotype");
@@ -98,15 +112,13 @@ sub dispatch {
     # see if they have a defined command mapping
     if (exists($submodule->{'mapping'}{$command})) {
 	# process and run it
-	@args = $submodule->map_and_run($command,
-					$submodule->{'mapping'}{$command},
-					@args);
-	$submodule->System(@args);
+	$submodule->map_and_run($command,
+				$submodule->{'mapping'}{$command},
+				@args);
 	return 1;
     }
 
-    print STDERR "ERROR: The \"$repotype\" module does know the command \"$command\"\n";
-    exit 1;
+    $self->ERROR("ERROR: The \"$repotype\" module does know the command \"$command\"");
 }
 
 sub map_and_run {
@@ -114,22 +126,58 @@ sub map_and_run {
     my %opts = @{$self->{'defaults'}{$subcmd} || []};
 
     # first process against the known arguments
-    my $cmdoptions = $master_arguments{$subcmd};
+    my $cmdoptions =
+      $master_arguments{$subcmd};
+    unshift @$cmdoptions, ["GUI:otherargs_text", "   "];
 
     # though it's discouraged to add more on a per-submodule, we do support it.
     push @$cmdoptions, @{$self->{'master_arguments'}}
       if (exists($self->{'master_arguments'}));
 
     Getopt::GUI::Long::Configure(qw(display_help no_ignore_case no_gui
-				    require_order));
+				    require_order allow_zero));
+
+    # save the current program name
+    my $savedprog = $main::0;
+    $main::0 = "$main::0 [OR OPTIONS] $subcmd";
+
+    # save the existing ARGV arguments (just in case)
+    my @savedARGV = @main::ARGV;
+    @main::ARGV = @args;
+
+    # and process our local arguments, and return everything to normal
     GetOptions(\%opts, @$cmdoptions) || exit;
+    my @remainingargs = @main::ARGV;
+    @main::ARGV = @savedARGV;
+    $main::0 = $savedprog;
 
     # process %opts
 
-    my $newcommand = $self->{'command'} || $subcmd;
+    my $newcommand = $self->{'command'};
     my $newsubcmd  = $map->{'command'} || $subcmd;
-    print "here: $newcommand, $newsubcmd\n";
-    $self->System($newcommand, $newsubcmd);
+
+    my $argsmap = $map->{'args'};
+
+    # build a list of options for the called command based on the
+    # options for our command.
+    my @options;
+    @options = (@{$map->{'options'}}) if (exists($map->{'options'}));
+    foreach my $optkey (keys(%opts)) {
+	if (!exists($argsmap->{$optkey})) {
+	    $self->ERROR("\"$newcommand $newsubcmd\" does not support the -$optkey option");
+	}
+	if ($argsmap->{$optkey} =~ /^-/) {
+	    # argument with a value indicated by a leading -
+	    push @options, "$argsmap->{$optkey}", $opts{$optkey};
+	} else {
+	    # singular argument
+	    push @options, "-$argsmap->{$optkey}";
+	}
+    }
+
+    use Data::Dumper;;
+
+    $self->System($newcommand, $newsubcmd, @options);
 }
 
 
@@ -240,12 +288,18 @@ sub debug {
     }
 }
 
+sub ERROR {
+    my ($self, @args) = shift;
+    print STDERR (join(" ",@_),"\n");
+    exit 1;
+}
+
 sub System {
     my $self = shift;
     if ($self->{'options'}{'dryrun'}) {
-	print STDERR "would run: ", @_, "\n";
+	print STDERR "would run: '", join("' '",@_), "'\n";
     } else {
-	$self->debug("running: ", @_);
+	$self->debug("running: ", join("' '",@_));
 	system(@_);
     }
 }

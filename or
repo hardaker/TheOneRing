@@ -13,15 +13,15 @@ Getopt::GUI::Long::Configure(qw(display_help no_ignore_case no_gui
 				require_order));
 
 GetOptions(\%opts,
-	   ["d|debug",  "Turn on debugging output\n"],
-	   ["n|dryrun", "Don't actually run anything, just show what would be done.\n"],
-	   ["GUI:VERISON", $VERSION],
+	   ["d|debug",  "Turn on debugging output"],
+	   ["n|dryrun", "Dry run only; just show what would be done."],
+	   ["GUI:VERSION", $VERSION],
+	   ["GUI:otherargs_text", "COMMAND [COMMAND OPTIONS]"],
 	  ) || exit;
 
 my @or_opts;
 push @or_opts, 'debug',  1 if ($opts{'d'});
 push @or_opts, 'dryrun', 1 if ($opts{'n'});
 
-use Data::Dumper;;
 my $or = new TheOneRing(@or_opts);
 $or->dispatch(@ARGV);

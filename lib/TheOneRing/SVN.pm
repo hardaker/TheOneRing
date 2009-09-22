@@ -9,27 +9,37 @@ our @ISA = qw(TheOneRing);
 
 our $VERSION = '0.1';
 
-sub update {
-    my $self = shift;
-    system("svn", "update", @_);
-}
+sub init {
+    my ($self) = @_;
+    $self->{'command'} = 'svk';
+    $self->{'mapping'} =
+      {
+       'status' =>
+       {
+	'args' => { q => 'q' },
+       },
 
-# XXX: -q
-sub status {
-    my $self = shift;
-    system("svn", "status", @_);
-}
+       'commit' =>
+       {
+	'args' => { m => '-m',
+		    q => 'q',
+		    N => 'N'},
+       },
 
-# XXX: -m
-sub commit {
-    my $self = shift;
-    system("svn", "commit", @_);
-}
+       'update' =>
+       {
+	'args' => { r => '-r',
+		    q => 'q',
+		    N => 'N'},
+       },
 
-# XXX: -m
-sub diff {
-    my $self = shift;
-    system("svn", "diff", @_);
+       'diff' =>
+       {
+	'args' => { r => '-r',
+		    N => 'N'},
+       },
+
+      };
 }
 
 1;

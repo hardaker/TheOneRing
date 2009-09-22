@@ -3,50 +3,25 @@
 package TheOneRing::SVK;
 
 use strict;
-use TheOneRing;
+use TheOneRing::SVN;
 
-our @ISA = qw(TheOneRing);
+# we're functionally really really close to SVN, so we'll inherit a
+# lot of that for option mapping, etc and augment as needed.
+our @ISA = qw(TheOneRing::SVN);
 
 our $VERSION = '0.1';
 
 sub init {
     my ($self) = @_;
+    $self->SUPER::init(@_);
+
     $self->{'command'} = 'svk';
-    $self->{'mapping'} =
-      {
-       'test' =>
-       {
-	'args' => { m => 'mapped' },
-       },
 
-       'status' =>
-       {
-	'args' => { q => 'q' },
-       },
+    # now just modify our slight differences to things...
+    # XXX: nothing yet
 
-       'commit' =>
-       {
-	'args' => { m => 'm' },
-       },
-
-      };
-}
-
-sub update {
-    my $self = shift;
-    system("svk", "update", @_);
-}
-
-# XXX: -m
-sub commit {
-    my $self = shift;
-    system("svk", "commit", @_);
-}
-
-# 
-sub diff {
-    my $self = shift;
-    system("svk", "diff", @_);
+    # eg:
+    # $self->{'mapping'}{'status'}{'args'}{'q'} = "Q";
 }
 
 1;
