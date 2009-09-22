@@ -6,8 +6,8 @@ use ExtUtils::MakeMaker;
 
 %opts = (
 	 'NAME'		=> 'TheOneRing',
-	 'EXE_FILES'    => [qw(tor)],
-	 'VERSION_FROM' => 'tor',
+	 'EXE_FILES'    => [qw(or)],
+	 'VERSION_FROM' => 'or',
 	);
 
 WriteMakefile(%opts);
