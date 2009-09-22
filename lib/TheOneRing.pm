@@ -219,7 +219,7 @@ sub expect_string {
 	return $value->($self, @args);
     } elsif ($value eq 'ARRAY' && ref($value->[0]) eq 'CODE') {
 	my $code = shift @$value;
-	$code->($self, @$value, @args);
+	return $code->($self, @$value, @args);
     } elsif ($value eq 'ARRAY') {
 	$self->ERROR("Expected a generic STRING and got an ARRAY");
     } elsif ($value eq 'HASH') {
@@ -232,7 +232,19 @@ sub expect_array {
     my ($self, $value, @args) = @_;
     if (ref($value) eq 'ARRAY' && ref($value->[0]) ne 'CODE') {
 	return $value;
+    } elsif (ref($value) eq 'ARRAY' && ref($value->[0]) eq 'CODE') {
+	my $code = shift @$value;
+	my $result = $code->($self, @$value, @args);
+	return $result if (ref($result) eq 'ARRAY');
+	return [$result];
+    } elsif (ref($value) eq 'ARRAY') {
+	return $value;
+    } elsif (ref($value) eq 'CODE') {
+	my $result = $value->($self, @args);
+	return $result if (ref($result) eq 'ARRAY');
+	return [$result];
     }
+
     return [$self->expect_string($value, @args)];
 }
 
@@ -261,8 +273,7 @@ sub map_args {
     my %opts = @{$self->{$subcmd}{'defaults'} || []};
 
     # first process against the known arguments
-    my $cmdoptions =
-      $master_arguments{$subcmd};
+    my $cmdoptions = $master_arguments{$subcmd};
     unshift @$cmdoptions, ["GUI:otherargs_text", "   "];
 
     # though it's discouraged to add more on a per-submodule, we do support it.
@@ -294,7 +305,8 @@ sub map_args {
     # build a list of options for the called command based on the
     # options for our command.
     my @options;
-    @options = (@{$map->{'options'}}) if (exists($map->{'options'}));
+    @options = (@{$self->expect_array($map->{'options'}, @remainingargs)})
+      if (exists($map->{'options'}));
     foreach my $optkey (keys(%opts)) {
 	if (!exists($argsmap->{$optkey})) {
 	    $self->ERROR("\"$newcommand $newsubcmd\" does not support the -$optkey option");

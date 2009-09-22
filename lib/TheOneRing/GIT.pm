@@ -22,7 +22,9 @@ sub init {
        # XXX: commit -a for commiting all files
        'commit' =>
        {
-	options => ['-a'],
+	options => sub { my ($self, @args) = @_;
+			 return ['-a'] if ($#args == -1);
+			 return [] },
 	'args' => { m => '-m' },
        },
 
