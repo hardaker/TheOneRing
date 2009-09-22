@@ -19,7 +19,7 @@ our %master_arguments =
 
    'diff' =>
    [
-   ["r|revision|msg=i" => "Revision to diff against"],
+   ["r|revision|msg=s" => "Revision to diff against"],
    ["N|non-recursive"  => "Don't decend into subdirectiories"],
    ],
 
@@ -35,11 +35,6 @@ our %master_arguments =
     ["q|quiet"          => "Quiet output"],
    ],
 
-   'test' =>
-   [
-    ["f|foo" => "bar"],
-    ["m|msg=s" => "message"],
-   ],
   );
 
 
