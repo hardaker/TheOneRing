@@ -1,0 +1,84 @@
+<!-- this is a makerelease script: http://makerelease.sourceforge.net/ -->
+<makerelease>
+  <steps>
+
+    <step type="system" title="Pre-Checks">
+      <commands>
+	<command>perl -Ilib tor status -q</command>
+	<command>grep VERSION tor</command>
+      </commands>
+    </step>
+
+    <step type="prompt" prompt="Enter the new version number:"
+      title="Pick A Version Number"
+      parameter="VERSION" values="^[\.\d]+$"
+      />
+
+    <step type="modify" title="Updating version number">
+      <modifications>
+	<modify
+	  find="(VERSION\s*=\s*.)([0-9]+\.[0-9]+)"
+	  replace="${1}{VERSION}">
+	  <files>
+	    <file>lib/*.pm</file>
+	    <file>lib/*/*.pm</file>
+	    <file>tor</file>
+	  </files>
+	</modify>
+      </modifications>
+    </step>
+
+    <step type="system" title="Check the version number changes">
+      <commands>
+	<command ignoreerror="1">perl -Ilib tor diff | egrep '^[-\+]'</command>
+      </commands>
+    </step>
+
+    <step type="system" title="SVN Commit the changes"
+    interactive="1">
+      <commands>
+	<command>perl -Ilib tor commit -m "Update Version Number: {VERSION}"</command>
+      </commands>
+    </step>
+
+    <step type="system" title="Make Test">
+      <commands>
+	<command>make clean</command>
+	<command>perl Makefile.PL</command>
+	<command>make test</command>
+      </commands>
+    </step>
+
+    <step type="section" interactive="1" title="Create Release">
+      <text>
+	We'll now:
+         - create the tag
+         - export the results to a tar ball.
+         - upload it to CPAN
+
+	Quit now if you're not ready to finish the release.
+      </text>
+    
+      <steps>
+	<step type="system" title="tag the release">
+	  <commands>
+	    <command>svk copy -m "tag of version {VERSION}" //local/or/trunk //local/or/tags/tor-{VERSION}</command>
+	  </commands>
+	</step>
+
+	<step type="system" title="make dist">
+	  <commands>
+	    <command>make dist</command>
+	  </commands>
+	</step>
+
+	<step type="system" title="upload to cpan">
+	  <commands>
+	    <command>cpan-upload -mailto wjhns117@hardakers.net -user hardaker -verbose tor-{VERSION}.tar.gz</command>
+	  </commands>
+	</step>
+
+      </steps>
+    </step>
+  </steps>
+</makerelease>
