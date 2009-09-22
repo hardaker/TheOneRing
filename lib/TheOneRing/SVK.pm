@@ -25,6 +25,15 @@ sub init {
 
     # svk doesn't handle as many args as svn
     $self->{'mapping'}{'list'}{'args'} = { r => '-r' };
+
+    $self->{'mapping'}{'export'} =
+      {
+       args => { N => 'N',
+		 q => 'q',
+		 r => '-r'},
+       command => 'checkout',
+       options => '--export',
+      }
 }
 
 1;

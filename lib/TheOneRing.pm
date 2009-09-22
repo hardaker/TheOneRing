@@ -65,7 +65,13 @@ our %master_arguments =
     ["q|quiet"             => "Quiet output"],
    ],
 
-   #XXX: export
+   'export' =>
+   [
+    ["r|revision=s"          => "Revision to update to"],
+    ["N|non-recursive"     => "Don't decend into subdirectiories"],
+    ["q|quiet"             => "Quiet output"],
+   ],
+
    #XXX: push
    #XXX: pull
    #XXX: tag
