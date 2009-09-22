@@ -22,6 +22,7 @@ sub init {
        # XXX: commit -a for commiting all files
        'commit' =>
        {
+	options => ['-a'],
 	'args' => { m => '-m' },
        },
 
@@ -95,6 +96,11 @@ sub init {
        },
 
       };
+}
+
+sub ignore {
+    my ($self, @args) = @_;
+    $self->add_to_file(".gitignore", @args);
 }
 
 1;

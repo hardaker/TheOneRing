@@ -96,4 +96,9 @@ sub revert {
     }
 }
 
+sub ignore {
+    my ($self, @args) = @_;
+    $self->add_to_file(".cvsignore", @args);
+}
+
 1;

@@ -85,6 +85,10 @@ our %master_arguments =
     ["q|quiet"             => "Quiet output"],
    ],
 
+   'ignore' =>
+   [
+   ],
+
    # XXX: multiple things offer recursive
    #  (need a way to specify that -N means *don't* do -R or something
 
@@ -209,7 +213,30 @@ sub dispatch {
     $self->ERROR("ERROR: The \"$repotype\" module does know the command \"$command\"");
 }
 
-sub map_and_run {
+sub expect_string {
+    my ($self, $value, @args) = @_;
+    if (ref($value) eq 'CODE') {
+	return $value->($self, @args);
+    } elsif ($value eq 'ARRAY' && ref($value->[0]) eq 'CODE') {
+	my $code = shift @$value;
+	$code->($self, @$value, @args);
+    } elsif ($value eq 'ARRAY') {
+	$self->ERROR("Expected a generic STRING and got an ARRAY");
+    } elsif ($value eq 'HASH') {
+	$self->ERROR("Expected a generic STRING and got a HASH");
+    }
+    return $value;
+}
+
+sub expect_array {
+    my ($self, $value, @args) = @_;
+    if (ref($value) eq 'ARRAY' && ref($value->[0]) ne 'CODE') {
+	return $value;
+    }
+    return [$self->expect_string($value, @args)];
+}
+
+sub map_args {
     my ($self, $subcmd, $map, @args) = @_;
     my %opts = @{$self->{'defaults'}{$subcmd} || []};
 
@@ -241,8 +268,9 @@ sub map_and_run {
 
     # process %opts
 
-    my $newcommand = $self->{'command'};
-    my $newsubcmd  = $map->{'command'} || $subcmd;
+    my $newcommand = $self->expect_string($self->{'command'}, @remainingargs);
+    my $newsubcmd  =
+      $self->expect_string($map->{'command'}, @remainingargs) || $subcmd;
 
     my $argsmap = $map->{'args'};
 
@@ -262,12 +290,17 @@ sub map_and_run {
 	    push @options, "-$argsmap->{$optkey}";
 	}
     }
-
-    use Data::Dumper;;
-
-    $self->System($newcommand, $newsubcmd, @options, @remainingargs);
+    return ($newcommand, $newsubcmd, \@options, \@remainingargs);
 }
 
+sub map_and_run {
+    my ($self, $subcmd, $map, @args) = @_;
+
+    my ($cmd, $subcmd, $options, $otherargs) =
+      $self->map_args($subcmd, $map, @args);
+
+    $self->System($cmd, $subcmd, @$options, @$otherargs);
+}
 
 sub load_subtype {
     my ($self, $type) = @_;
@@ -390,6 +423,16 @@ sub System {
 	$self->debug("running: ", join("' '",@_));
 	system(@_);
     }
+}
+
+# used by submodules for adding lines (like "ignore file") to a static file
+sub add_to_file {
+    my ($self, $file, @params) = @_;
+    open(IGFILE,">>$file");
+    foreach my $line (@params) {
+	print IGFILE "$line\n";
+    }
+    close(IGFILE);
 }
 
 #
