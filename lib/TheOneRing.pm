@@ -72,6 +72,13 @@ our %master_arguments =
     ["q|quiet"             => "Quiet output"],
    ],
 
+   'log' =>
+   [
+    ["r|revision=s"          => "Revision to update to"],
+    ["N|non-recursive"     => "Don't decend into subdirectiories"],
+    ["q|quiet"             => "Quiet output"],
+   ],
+
    #XXX: log
    #XXX: push
    #XXX: pull
