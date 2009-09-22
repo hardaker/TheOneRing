@@ -177,7 +177,7 @@ sub map_and_run {
 
     use Data::Dumper;;
 
-    $self->System($newcommand, $newsubcmd, @options);
+    $self->System($newcommand, $newsubcmd, @options, @remainingargs);
 }
 
 
