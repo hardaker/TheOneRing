@@ -72,13 +72,35 @@
 	  </commands>
 	</step>
 
+	<step type="system" title="creating binaries">
+	  <commands>
+	    <command>sh dist/Makefile.pp {VERSION}</command>
+	  </commands>
+	</step>	  
+
 	<step type="system" title="upload to cpan">
 	  <commands>
 	    <command>cpan-upload -mailto wjhns117@hardakers.net -user hardaker -verbose tor-{VERSION}.tar.gz</command>
 	  </commands>
 	</step>
 
+	<step type="system" title="upload to personal site">
+	  <commands>
+	    <command>scp tor-{VERSION}.tar.gz dh:hardakers.net/code/TheOneRing/releases/</command>
+	    <command>scp tor-{VERSION}.linux dh:hardakers.net/code/TheOneRing/releases/</command>
+	  </commands>
+	</step>
+	  
+
       </steps>
+    </step>
+
+    <step type="system" title="make docs">
+      <commands>
+	<command>pod2html --infile=tor --outfile=tor.html</command>
+	<command>pod2html --infile=lib/TheOneRing.pm --outfile=TheOneRing.html</command>
+	<command>scp tor.html TheOneRing.html dh:hardakers.net/code/TheOneRing/</command>
+      </commands>
     </step>
   </steps>
 </makerelease>
