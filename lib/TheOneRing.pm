@@ -172,8 +172,11 @@ sub dispatch {
     } elsif (-d 'CVS') {
 	# that's an easy check.
 	$repotype = 'CVS';
-    } elsif (-d '.git') {
+    } elsif (-d '.git' || -d '../.git'  || -d '../../.git' 
+	     || -d '../../../.git' || -d '../../../../.git'
+	     || -d '../../../../.git' || -d '../../../../../.git') {
 	# that's an easy check.
+	# XXX: yeah, that'll scale...  needs to recursively go up
 	$repotype = 'GIT';
     } else {
 	$repotype = $self->find_cached_type();
