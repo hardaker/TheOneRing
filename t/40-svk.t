@@ -16,7 +16,7 @@ $ENV{'SVKROOT'}="$tmpdir/repo";
 $ENV{'SVKBATCHMODE'} = 1;
 system("svk depotmap -i");
 system("svk mkdir -m \"initial repo\" //test");
-chdir("..");
+chdir("$tmpdir");
 system("svk checkout //test");
 system("svk checkout //test test2");
 chdir("test");

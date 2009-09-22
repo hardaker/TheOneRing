@@ -18,10 +18,8 @@ mkdir("$tmpdir/test");
 chdir("$tmpdir/test");
 system("git init");
 chdir("..");
-mkdir("test2");
-chdir("test2");
-system("git clone $tmpdir/test");
-chdir("../test");
+system("git clone $tmpdir/test test2");
+chdir("test");
 ok(1, "setup repo");
 
 do "$startingdir/t/common-tests.pl";
