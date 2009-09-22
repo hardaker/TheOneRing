@@ -10,5 +10,7 @@
 .svn
 pm_to_blib
 blib
-releases/.*
-geoqo-.*
+.*.linux
+.*.tar.gz
+.*.html
+.*.tmp
