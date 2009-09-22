@@ -5,9 +5,9 @@
 use ExtUtils::MakeMaker;
 
 %opts = (
-	 'NAME'		=> 'or',
-	 'EXE_FILES'    => [qw(or)],
-	 'VERSION_FROM' => 'or',
+	 'NAME'		=> 'tor',
+	 'EXE_FILES'    => [qw(tor)],
+	 'VERSION_FROM' => 'tor',
 	);
 
 WriteMakefile(%opts);
