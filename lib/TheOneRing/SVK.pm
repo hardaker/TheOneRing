@@ -22,6 +22,9 @@ sub init {
 
     # eg:
     # $self->{'mapping'}{'status'}{'args'}{'q'} = "Q";
+
+    # svk doesn't handle as many args as svn
+    $self->{'mapping'}{'list'}{'args'} = { r => '-r' };
 }
 
 1;
