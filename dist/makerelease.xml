@@ -80,13 +80,13 @@
 
 	<step type="system" title="upload to cpan">
 	  <commands>
-	    <command>cpan-upload -mailto wjhns117@hardakers.net -user hardaker -verbose tor-{VERSION}.tar.gz</command>
+	    <command>cpan-upload -mailto wjhns117@hardakers.net -user hardaker -verbose TheOneRing-{VERSION}.tar.gz</command>
 	  </commands>
 	</step>
 
 	<step type="system" title="upload to personal site">
 	  <commands>
-	    <command>scp tor-{VERSION}.tar.gz dh:hardakers.net/code/TheOneRing/releases/</command>
+	    <command>scp TheOneRing-{VERSION}.tar.gz dh:hardakers.net/code/TheOneRing/releases/</command>
 	    <command>scp tor-{VERSION}.linux dh:hardakers.net/code/TheOneRing/releases/</command>
 	  </commands>
 	</step>
