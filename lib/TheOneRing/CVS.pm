@@ -58,6 +58,12 @@ sub init {
 		  r => '-r'}
        },
 
+       'add' =>
+       {
+	options => ['-m','adding files'],
+	args => { }
+       },
+
       };
 }
 
