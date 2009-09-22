@@ -19,6 +19,7 @@ sub init {
 	'args' => { },
        },
 
+       # XXX: commit -a for commiting all files
        'commit' =>
        {
 	'args' => { m => '-m' },
@@ -31,6 +32,8 @@ sub init {
 # 		    N => 'N'},
 #        },
 
+       # need a special function for this to deal with how revs are handled
+       # ie, -r foo file => foo file
        'diff' =>
        {
 	'args' => { },
@@ -84,6 +87,8 @@ sub init {
 
        'revert' =>
        {
+	# XXX: requires file names to revert
+	command => 'checkout',
 	args => { # q => 'q',
 		  # N
 		},
