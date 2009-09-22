@@ -197,6 +197,15 @@ Quiet output
 
 =back
 
+=head2 ignore
+
+=over
+
+ERROR: The "SVK" module does know the command "ignore"
+
+
+=back
+
 =head2 annotate
 
 =over
@@ -419,6 +428,7 @@ Quiet output
 
 
 =back
+
 
 
 =head1 EXAMPLE
