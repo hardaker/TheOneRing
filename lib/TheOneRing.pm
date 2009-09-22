@@ -538,6 +538,9 @@ Yes, much more documentation is needed here.
 
 =head1 SEE ALSO
 
+The web page: http://www.hardakers.net/code/TheOneRing/
+(with compiled executable downloads)
+
 The command line wrapper: or(1)
 
 =head1 AUTHOR

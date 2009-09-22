@@ -448,6 +448,13 @@ switch back to your natice client for complex operations.  But by that
 point, your brain will likely already be thinking about the version
 control system in question and it won't be a big leap to switch back.
 
+=head1 SEE ALSO
+
+The web page: http://www.hardakers.net/code/TheOneRing/
+(with compiled executable downloads)
+
+perldoc TheOneRing
+
 =head1 STATUS
 
 Alpha; it's just begun.  But I'm already using it.  Expect some bumps
