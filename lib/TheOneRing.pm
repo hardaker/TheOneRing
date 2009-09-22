@@ -75,7 +75,12 @@ our %master_arguments =
    #XXX: push
    #XXX: pull
    #XXX: tag
+   #XXX: mkdir
+   #XXX: cat
+   #XXX: import?
+   #XXX: lock?
    #XXX: create?
+   #XXX: property sets
 
   );
 
