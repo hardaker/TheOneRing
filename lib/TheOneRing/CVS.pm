@@ -64,6 +64,12 @@ sub init {
 	args => { }
        },
 
+       'remove' =>
+       {
+	options => ['-f'],
+	args => { N => 'l' }
+       },
+
       };
 }
 
@@ -105,6 +111,11 @@ sub revert {
 sub ignore {
     my ($self, @args) = @_;
     $self->add_to_file(".cvsignore", @args);
+}
+
+sub move {
+    my ($self, @args) = @_;
+    $self->move_by_adddel(@args);
 }
 
 1;

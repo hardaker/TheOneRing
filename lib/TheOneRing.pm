@@ -85,6 +85,10 @@ our %master_arguments =
     ["q|quiet"             => "Quiet output"],
    ],
 
+   'move' =>
+   [
+   ],
+
    'ignore' =>
    [
    ],
@@ -469,11 +473,17 @@ sub add_to_file {
 }
 
 #
-# Aliases to other functions
+# common functions
 #
-sub co {
-    my $mod = shift;
-    $mod->checkout(@_);
+sub move_by_adddel {
+    my ($self, @args) = @_;
+    $self->ERROR("move can only take one OLD and one NEW file")
+      if ($#args != 1);
+
+    my ($old, $new) = @args;
+    rename($old, $new);
+    $self->dispatch("remove", "$old");
+    $self->dispatch("add", "$new");
 }
 
 #

@@ -22,6 +22,18 @@ $tor->dispatch("update");
 ok($? == 0, "updating second checkout");
 ok(-f "test-file", "checking second test-file");
 
+# move
+chdir("../test");
+$tor->dispatch("move", "test-file", "moved-file");
+$tor->dispatch("commit", "-m", "moved test-file to moved-file");
+
+chdir("../test2");
+$tor->dispatch("update");
+ok($? == 0, "updating second checkout after move");
+ok(-f "moved-file", "checking moved-file");
+ok(! -f "test-file", "checking DNE of test-file");
+
+
 # cleanup
 #system("rm -rf $tmpdir");
 
