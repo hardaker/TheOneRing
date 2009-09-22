@@ -9,21 +9,37 @@ our @ISA = qw(TheOneRing);
 
 our $VERSION = '0.1';
 
-sub update {
-    my $self = shift;
-    system("cvs", "update", @_);
-}
+sub init {
+    my ($self) = @_;
+    $self->{'command'} = 'cvs';
+    $self->{'mapping'} =
+      {
+# might be able to hack this through update
+#        'status' =>
+#        {
+# 	'args' => { q => 'q' },
+#        },
 
-# XXX: some magic with update?
-# sub status {
-#     my $self = shift;
-#     system("cvs", "status", @_);
-# }
+       'commit' =>
+       {
+	'args' => { m => '-m',
+		    N => 'l'},
+       },
 
-# XXX: -m
-sub commit {
-    my $self = shift;
-    system("cvs", "commit", @_);
+       'update' =>
+       {
+	# need -D flag equiv
+	'args' => { r => '-r',
+		    N => 'l'},
+       },
+
+       'diff' =>
+       {
+	'args' => { r => '-r',
+		    N => 'l'},
+       },
+
+      };
 }
 
 1;

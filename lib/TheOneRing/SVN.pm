@@ -11,7 +11,7 @@ our $VERSION = '0.1';
 
 sub init {
     my ($self) = @_;
-    $self->{'command'} = 'svk';
+    $self->{'command'} = 'svn';
     $self->{'mapping'} =
       {
        'status' =>
