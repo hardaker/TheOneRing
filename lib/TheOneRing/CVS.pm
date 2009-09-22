@@ -8,7 +8,7 @@ use IO::File;
 
 our @ISA = qw(TheOneRing);
 
-our $VERSION = '0.21';
+our $VERSION = '0.22';
 
 sub init {
     my ($self) = @_;

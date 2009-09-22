@@ -6,7 +6,7 @@ use TheOneRing;
 
 use Getopt::GUI::Long;
 
-our $VERSION = '0.21';
+our $VERSION = '0.22';
 
 my %opts;
 Getopt::GUI::Long::Configure(qw(display_help no_ignore_case no_gui

@@ -9,7 +9,7 @@ use TheOneRing::SVN;
 # lot of that for option mapping, etc and augment as needed.
 our @ISA = qw(TheOneRing::SVN);
 
-our $VERSION = '0.21';
+our $VERSION = '0.22';
 
 sub init {
     my ($self) = @_;
