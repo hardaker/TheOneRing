@@ -414,3 +414,44 @@ sub co {
 #
 
 1;
+
+=head1 NAME
+
+TheOneRing - A high level perl class to bind all VCs together
+
+=head1 SYNOPSIS
+
+ my $or = new TheOneRing();
+ $or->dispatch("commit", "-m", "checking in some files", "file1", "file2");
+
+=head1 DESCRIPTION
+
+B<TheOneRing> is merely a wraper around child classes that knows how
+to pick which child class to load based on the current working
+directory.  IE, if in a CVS checkout directory then the
+TheOneRing::CVS module is loaded and the child is called to process
+the command.
+
+=head2 Programming Child Classes
+
+Most commands can be processed by simple definitions without coding
+that can be defined in the child's I<init()> function.  More complex
+conversion requirements can be done by defining a subroutine name for
+the action desired.
+
+The TheOneRing::CVS module is actually a good reference module since
+it uses both the automatic command line mapping features as well as
+subroutines to implement it's goals.
+
+Yes, much more documentation is needed here.
+
+=head1 SEE ALSO
+
+The command line wrapper: tor(1)
+
+=head1 AUTHOR
+
+Wes Hardaker <hardaker ATAT users.sourceforge.net>
+
+=cut
+
