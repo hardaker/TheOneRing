@@ -28,29 +28,29 @@ $or->dispatch(@ARGV);
 
 =head1 NAME
 
-tor - The One Ring to manage all other version control systems
+or - The One Ring to manage all other version control systems
 
 =head1 SYNOPSIS
 
   # cd svn_repository_checkout
-  # tor update
-  # tor diff
-  # tor commit -m "woot"
+  # or update
+  # or diff
+  # or commit -m "woot"
 
   # cd cvs_repository_checkout
-  # tor update
-  # tor diff
-  # tor commit -m "woot"
+  # or update
+  # or diff
+  # or commit -m "woot"
 
   # cd git_repository_checkout
-  # tor update
-  # tor diff
-  # tor commit -m "woot"
+  # or update
+  # or diff
+  # or commit -m "woot"
 
   # cd svk_repository_checkout
-  # tor update
-  # tor diff
-  # tor commit -m "woot"
+  # or update
+  # or diff
+  # or commit -m "woot"
 
 =head1 DESCRIPTION
 
@@ -78,7 +78,7 @@ systems means "non-recursive" but in CVS it's "-l" (of course)).
 
 Hence, B<The One Ring was> forged.  And it was good (not evil).
 
-B<tor> is the command line application that is a wrapper around SVN,
+B<or> is the command line application that is a wrapper around SVN,
 SVK, CVS and GIT (currently just these 4; others are easy to add).
 Internally most of the work is done by the I<TheOneRing> perl module
 which does the brute force of the work (which is really driving the
@@ -107,7 +107,7 @@ Dry run only; just show what would be done.
 
 =head1 SUPPORTED COMMANDS
 
-The following are the currently supported commands that tor
+The following are the currently supported commands that or
 understands and can convert from one system to the next.  Their
 individual options are shown as well.  The individual options B<must>
 go after the command.
@@ -435,14 +435,14 @@ Quiet output
 
 Debugging: use the -d and -n switch just to see what it'll do:
 
-  # tor -d -n commit -m "do a commit"
+  # or -d -n commit -m "do a commit"
   found subtype SVK
   running SVK->commit
   would run: 'svk' 'commit' '-m' 'do a commit'
 
 =head1 CAVEATS
 
-B<tor> will B<never> replace all the other command line utilties and
+B<or> will B<never> replace all the other command line utilties and
 wrap around them completely.  There B<will> be times you'll need to
 switch back to your natice client for complex operations.  But by that
 point, your brain will likely already be thinking about the version

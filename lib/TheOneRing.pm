@@ -520,6 +520,9 @@ directory.  IE, if in a CVS checkout directory then the
 TheOneRing::CVS module is loaded and the child is called to process
 the command.
 
+B<or> is the command line wrapper around this class, and is what most
+users are expected to need.
+
 =head2 Programming Child Classes
 
 Most commands can be processed by simple definitions without coding
@@ -535,7 +538,7 @@ Yes, much more documentation is needed here.
 
 =head1 SEE ALSO
 
-The command line wrapper: tor(1)
+The command line wrapper: or(1)
 
 =head1 AUTHOR
 
