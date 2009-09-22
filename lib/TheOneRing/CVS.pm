@@ -76,4 +76,24 @@ sub info {
     print "Full Path:  $root/$repo";
 }
 
+sub revert {
+    my ($self, @args) = @_;
+
+    # lame quick processing
+    my $quiet = 0;
+    while ($args[0] eq '-q') {
+	$quiet = 1;
+	shift @args;
+    }
+
+    if ($#args == -1) {
+	$self->ERROR("CVS requires you manually specify which files to revert");
+    }
+
+    foreach my $arg (@args) {
+	unlink($arg);
+	$self->System("cvs update $arg");
+    }
+}
+
 1;

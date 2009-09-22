@@ -79,6 +79,15 @@ our %master_arguments =
     ["q|quiet"             => "Quiet output"],
    ],
 
+   'revert' =>
+   [
+    ["N|non-recursive"     => "Don't decend into subdirectiories"],
+    ["q|quiet"             => "Quiet output"],
+   ],
+
+   # XXX: multiple things offer recursive
+   #  (need a way to specify that -N means *don't* do -R or something
+
    #XXX: log
    #XXX: push
    #XXX: pull
@@ -87,7 +96,6 @@ our %master_arguments =
    #XXX: mkdir
    #XXX: cat
    #XXX: resolve(d)
-   #XXX: revert
    #XXX: import?
    #XXX: lock? / unlock
    #XXX: create?

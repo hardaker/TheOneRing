@@ -81,6 +81,13 @@ sub init {
 		  r => '-r'}
        },
 
+       'revert' =>
+       {
+	args => { q => 'q',
+		  # N => XXX: same as -depth=immediates I think
+		},
+       },
+
       };
 }
 
