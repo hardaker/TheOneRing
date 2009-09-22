@@ -77,10 +77,13 @@ our %master_arguments =
    #XXX: tag
    #XXX: mkdir
    #XXX: cat
+   #XXX: resolve(d)
+   #XXX: revert
    #XXX: import?
-   #XXX: lock?
+   #XXX: lock? / unlock
    #XXX: create?
    #XXX: property sets
+   #XXX: switch
 
   );
 
