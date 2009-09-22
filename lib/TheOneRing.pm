@@ -197,6 +197,8 @@ sub dispatch {
     $self->debug("found subtype $repotype");
 
     my $submodule = $self->load_subtype($repotype);
+    $self->ERROR("failed to load $repotype: \n", $@) if (!$submodule);
+
     $self->debug("running $repotype->$command");
 
     # they have a method defined

@@ -19,6 +19,9 @@ chdir("$tmpdir/test");
 system("git init");
 chdir("..");
 system("git clone $tmpdir/test test2");
+#chdir("test2");
+#system("git config branch.master.remote test");
+#system("git config branch.master.remote test");
 chdir("test");
 ok(1, "setup repo");
 

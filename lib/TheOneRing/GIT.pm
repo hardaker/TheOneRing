@@ -28,12 +28,16 @@ sub init {
 	'args' => { m => '-m' },
        },
 
-#        'update' =>
-#        {
-# 	'args' => { r => '-r',
+        'update' =>
+        {
+	 'command' => 'pull',
+	 'options' => ['origin', 'HEAD'],
+ 	'args' => {
+#		    r => '-r',
 # 		    q => 'q',
-# 		    N => 'N'},
-#        },
+# 		    N => 'N',
+		  },
+	},
 
        # need a special function for this to deal with how revs are handled
        # ie, -r foo file => foo file
@@ -103,6 +107,11 @@ sub init {
 sub ignore {
     my ($self, @args) = @_;
     $self->add_to_file(".gitignore", @args);
+}
+
+sub move {
+    my ($self, @args) = @_;
+    $self->move_by_adddel(@args);
 }
 
 1;
