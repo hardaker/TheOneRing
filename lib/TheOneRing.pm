@@ -215,6 +215,9 @@ sub dispatch {
 
 sub expect_string {
     my ($self, $value, @args) = @_;
+    if (!defined($value)) {
+	return $value; #XXX: should be an error?
+    }
     if (ref($value) eq 'CODE') {
 	return $value->($self, @args);
     } elsif ($value eq 'ARRAY' && ref($value->[0]) eq 'CODE') {
@@ -252,7 +255,7 @@ sub save_ARGV {
     my ($self, $newargv, @newargs) = @_;
 
     # save the current program name
-    my $self->{'savedprog'} = $main::0;
+    $self->{'savedprog'} = $main::0;
     $main::0 = $newargv if (defined($newargv));
 
     # save the existing ARGV arguments (just in case)
@@ -325,7 +328,8 @@ sub map_args {
 sub map_and_run {
     my ($self, $subcmd, $map, @args) = @_;
 
-    my ($cmd, $subcmd, $options, $otherargs) =
+    my ($cmd, $options, $otherargs);
+    ($cmd, $subcmd, $options, $otherargs) =
       $self->map_args($subcmd, $map, @args);
 
     $self->System($cmd, $subcmd, @$options, @$otherargs);
