@@ -5,7 +5,7 @@
 use ExtUtils::MakeMaker;
 
 %opts = (
-	 'NAME'		=> 'tor',
+	 'NAME'		=> 'TheOneRing',
 	 'EXE_FILES'    => [qw(tor)],
 	 'VERSION_FROM' => 'tor',
 	);
