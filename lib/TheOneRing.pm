@@ -4,8 +4,29 @@ package TheOneRing;
 
 use strict;
 use UNIVERSAL;
+use Getopt::GUI::Long;
 
 our $VERSION = '0.1';
+
+our %master_arguments =
+  (
+   'commit' =>
+   [
+   ["m|message|msg=s" => "Commit message"],
+   ],
+
+   'diff' =>
+   [
+   ["r|revision|msg=i" => "Revision to diff against"],
+   ],
+
+   'test' =>
+   [
+   ["f|foo" => "bar"],
+   ],
+  );
+
+
 
 # note: this new clause is used by most sub-modules too, altering it
 # will alter them.
@@ -13,7 +34,7 @@ sub new {
     my $type = shift;
     my ($class) = ref($type) || $type;
     my $self = {};
-    %$self = @_;
+    $self->{'options'} = {@_};
     bless($self, $class);
     $self->init();
     return $self;
@@ -66,16 +87,51 @@ sub dispatch {
     $self->debug("found subtype $repotype");
 
     my $submodule = $self->load_subtype($repotype);
-    $self->debug("running $repotype->$command\n");
+    $self->debug("running $repotype->$command");
 
-    if (!$submodule->can($command)) {
-	print STDERR "ERROR: The \"$repotype\" module does know the command \"$command\"\n";
-	exit 1;
+    # they have a method defined
+    if ($submodule->can($command)) {
+	$submodule->$command(@args);
+	return 1;
     }
 
-    $submodule->$command(@args);
+    # see if they have a defined command mapping
+    if (exists($submodule->{'mapping'}{$command})) {
+	# process and run it
+	@args = $submodule->map_and_run($command,
+					$submodule->{'mapping'}{$command},
+					@args);
+	$submodule->System(@args);
+	return 1;
+    }
 
+    print STDERR "ERROR: The \"$repotype\" module does know the command \"$command\"\n";
+    exit 1;
 }
+
+sub map_and_run {
+    my ($self, $subcmd, $map, @args) = @_;
+    my %opts = @{$self->{'defaults'}{$subcmd} || []};
+
+    # first process against the known arguments
+    my $cmdoptions = $master_arguments{$subcmd};
+
+    # though it's discouraged to add more on a per-submodule, we do support it.
+    push @$cmdoptions, @{$self->{'master_arguments'}}
+      if (exists($self->{'master_arguments'}));
+
+    Getopt::GUI::Long::Configure(qw(display_help no_ignore_case no_gui
+				    require_order));
+    GetOptions(\%opts, @$cmdoptions) || exit;
+
+    # process %opts
+
+    my $newcommand = $self->{'command'} || $subcmd;
+    my $newsubcmd  = $map->{'command'} || $subcmd;
+    print "here: $newcommand, $newsubcmd\n";
+    $self->System($newcommand, $newsubcmd);
+}
+
 
 sub load_subtype {
     my ($self, $type) = @_;
@@ -86,6 +142,10 @@ sub load_subtype {
 
     # once loaded, create an instance
     my $submod = eval "new TheOneRing::$type();";
+
+    # copy in our running options
+    $submod->{'options'} = $self->{'options'};
+
     return $submod;
 }
 
@@ -175,8 +235,18 @@ sub build_known_types {
 
 sub debug {
     my $self = shift;
-    if ($self->{'debug'}) {
-	print STDERR @_, "\n";
+    if ($self->{'options'}{'debug'}) {
+	print STDERR (join(" ",@_), "\n");
+    }
+}
+
+sub System {
+    my $self = shift;
+    if ($self->{'options'}{'dryrun'}) {
+	print STDERR "would run: ", @_, "\n";
+    } else {
+	$self->debug("running: ", @_);
+	system(@_);
     }
 }
 

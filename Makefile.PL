@@ -6,7 +6,8 @@ use ExtUtils::MakeMaker;
 
 %opts = (
 	 'NAME'		=> 'or',
-	 'EXE_FILES' => [qw(or)],
+	 'EXE_FILES'    => [qw(or)],
+	 'VERSION_FROM' => 'or',
 	);
 
 WriteMakefile(%opts);

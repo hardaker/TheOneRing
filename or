@@ -1,22 +1,26 @@
+#!/usr/bin/perl
 # Copyright (C) 2009 Wes Hardaker
 # License: GNU GPLv2.  See the COPYING file for details.
-#!/usr/bin/perl
 
 use TheOneRing;
 
 use Getopt::GUI::Long;
+
+our $VERSION = '0.1';
 
 my %opts;
 Getopt::GUI::Long::Configure(qw(display_help no_ignore_case no_gui
 				require_order));
 
 GetOptions(\%opts,
-	   ["d|debug", "Turn on debugging output\n"]
+	   ["d|debug",  "Turn on debugging output\n"],
+	   ["n|dryrun", "Don't actually run anything, just show what would be done.\n"],
+	   ["GUI:VERISON", $VERSION],
 	  ) || exit;
 
 my @or_opts;
-push @or_opts, 'debug', 1 if ($opts{'d'});
-
+push @or_opts, 'debug',  1 if ($opts{'d'});
+push @or_opts, 'dryrun', 1 if ($opts{'n'});
 
 use Data::Dumper;;
 my $or = new TheOneRing(@or_opts);

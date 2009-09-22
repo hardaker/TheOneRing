@@ -9,15 +9,32 @@ our @ISA = qw(TheOneRing);
 
 our $VERSION = '0.1';
 
+sub init {
+    my ($self) = @_;
+    $self->{'command'} = 'svk';
+    $self->{'mapping'} =
+      {
+       'test' =>
+       {
+	'args' => { m => 'mapped' },
+       },
+
+       'status' =>
+       {
+	'args' => { q => 'q' },
+       },
+
+       'commit' =>
+       {
+	'args' => { m => 'm' },
+       },
+
+      };
+}
+
 sub update {
     my $self = shift;
     system("svk", "update", @_);
-}
-
-# XXX: -q
-sub status {
-    my $self = shift;
-    system("svk", "status", @_);
 }
 
 # XXX: -m
