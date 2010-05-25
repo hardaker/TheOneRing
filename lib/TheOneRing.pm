@@ -174,18 +174,18 @@ sub dispatch {
     #
 
     # determine based on what's in the directory
-    if (-d '.svn') {
-	# that's an easy check.
-	$repotype = 'SVN';
-    } elsif (-d 'CVS') {
-	# that's an easy check.
-	$repotype = 'CVS';
-    } elsif (-d '.git' || -d '../.git'  || -d '../../.git' 
+    if (-d '.git' || -d '../.git'  || -d '../../.git' 
 	     || -d '../../../.git' || -d '../../../../.git'
 	     || -d '../../../../.git' || -d '../../../../../.git') {
 	# that's an easy check.
 	# XXX: yeah, that'll scale...  needs to recursively go up
 	$repotype = 'GIT';
+    } elsif (-d '.svn') {
+	# that's an easy check.
+	$repotype = 'SVN';
+    } elsif (-d 'CVS') {
+	# that's an easy check.
+	$repotype = 'CVS';
     } else {
 	$repotype = $self->find_cached_type();
 	if (!defined($repotype)) {
