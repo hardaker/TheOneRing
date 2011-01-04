@@ -1,4 +1,4 @@
-# Copyright (C) 2009 Wes Hardaker
+# Copyright (C) 2009-2011 Wes Hardaker
 # License: GNU GPLv2.  See the COPYING file for details.
 package TheOneRing::GIT;
 
@@ -14,10 +14,10 @@ sub init {
     $self->{'command'} = 'git';
     $self->{'mapping'} =
       {
-       'status' =>
-       {
-	'args' => { },
-       },
+#        'status' =>
+#        {
+# 	'args' => { },
+#        },
 
        # XXX: commit -a for commiting all files
        'commit' =>
@@ -101,6 +101,13 @@ sub init {
 		},
        },
 
+       'move' =>
+       {
+	command => 'mv',
+	args => { #n => 'n'
+		},
+       },
+
       };
 }
 
@@ -109,9 +116,20 @@ sub ignore {
     $self->add_to_file(".gitignore", @args);
 }
 
-sub move {
+sub status {
     my ($self, @args) = @_;
-    $self->move_by_adddel(@args);
+    # lame quick processing
+    my $quiet = 0;
+    while ($args[0] eq '-q') {
+	$quiet = 1;
+	shift @args;
+    }
+
+    open(GITCMD, "git status " . join(" ", @args) . "|");
+    while (<GITCMD>) {
+	last if ($quiet && /# Untracked files:/);
+	print;
+    }
 }
 
 1;

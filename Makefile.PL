@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# Copyright (C) 2007-2009 Wes Hardaker
+# Copyright (C) 2007-2011 Wes Hardaker
 # License: GNU GPLv2.  See the COPYING file for details.
 
 use ExtUtils::MakeMaker;
